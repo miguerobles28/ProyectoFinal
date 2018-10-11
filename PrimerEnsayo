@@ -1,0 +1,138 @@
+#include <iostream>
+#include <math.h>
+void MvtoPara(void);
+void ChoquesEla (void);
+void rebote(void);
+using namespace std;
+const float g = 9.8;
+int elecc=0;
+bool elecpara = 0;
+float v0 = 0, Y0 = 0, alfa = 0, consfrici = 0, radpar = 0, t = 0, tfi=0;//mvto parabolico
+float m1 = 0, m2 = 0,  v02;//choques elasticos
+float h = 0, e1=0;//rebotes
+int main()
+{
+   cout<<"\t\t""Calculo de moviemientos en fisica"<<"\n";
+   cout<<"Este programa permite realizar 4 funciones en fisica: "<<"\n"
+       <<"Moviento parabolico"<<"\n"
+       <<"Choques elasticos"<<"\n"
+       <<"Rebotes"<<"\n"
+       <<"\n";
+   cout<<"Si desea calcular el movimiento de parabolico de una particula digite 1"<<"\n"
+       <<"Si desea calcular choques elasticos digite 2"<<"\n"
+       <<"Si desea calcular rebotes de una particula digite 3"<<"\n"
+       <<"\n";
+   cin>>elecc;
+   if(elecc==1)
+   {
+       cout<<"Si desea calcular el movimiento parabolico de una particula sin friccion digite 1, sino digite 0"<<"\n";
+       //variables que se digitan por teclado
+       cin>>elecpara;
+       cout<<"Digite la velocidad inicial de la particula"<<"\n";
+       cin>>v0;
+       cout<<"Digite la posicion inicial en el eje y"<<"\n";
+       cin>>Y0;
+       cout<<"Digite el angulo de lanzamiento"<<"\n";
+       cin>>alfa;
+       cout<<"Digite el intervalo de tiempo en el que desea ver las respuestas"<<"\n";
+       cin>>t;
+       if(elecpara==0)
+       {
+           cout<<"Digite la constante de friccion"<<"\n";
+           cin>>consfrici;
+           cout<<"Digite el radio de la particula"<<"\n";
+           cin>>radpar;
+       }
+       MvtoPara();
+   }
+   else if(elecc==2)
+   {
+       cout<<"\t\Calculo de choques elasticos "<<"\n";
+       cout<<"Digite la primera masa"<<"\n";
+       cin>>m1;
+       cout<<"Digite la segunda masa"<<"\n";
+       cin>>m2;
+       cout<<"Digite la velocidad inicial de la masa 1"<<"\n";
+       cin>>v0;
+       cout<<"Digite la velocidad inicial de la masa 2"<<"\n";
+       cin>>v02;
+       ChoquesEla ();
+   }
+   else if(elecc==3)
+   {
+       cout<<"\t\Calculo de rebotes "<<"\n";
+       cout<<"Digite la altura donde se deja caer la particula"<<"\n";
+       cin>>h;
+       cout<<"Digite la masa de la particula"<<"\n";
+       cin>>m1;
+       cout<<"Digite el coeficiente de restitucion, recuerde que esta comprendido entre 0 y 1"<<"\n";
+       cin>>e1;
+       rebote();
+   }
+   return 0;
+}
+void MvtoPara(void)
+{
+    cout<<"\t\Calculo del movimiento parabolico de una particula"<<"\n";
+    float xf = 0, yf = 0, vx = 0, vy = 0;
+    //variables a calcular
+    if(elecpara==1)
+    {
+        tfi=((2*v0*sin(alfa))/g);
+        for(float i = 0; i<=t; i++)
+        {
+        float t1 = tfi*(i/t);
+        //calculos posicion
+        xf = v0*cos(alfa)*t1;
+        yf = Y0 + (v0*sin(alfa)*t1) - ((t1*t1*g)/2.0f);
+        //calculos velocidad
+        vx = v0*cos(alfa);
+        vy = v0*sin(alfa)-(g*t1);
+        printf("T=%4.4f  X=%4.4f  Y=%4.4f  Vx=%4.4f  Vy=%4.4f \n", t1,xf,yf,vx,vy);
+        }
+    }
+    else
+    {
+
+    }
+}
+void ChoquesEla (void)
+{
+  float vf1 = 0, vf2 =0;
+  cout<<"Si la masa 2 esta en reposo"<<"\n";
+  if(v02==0)
+  {
+      vf1 = ((m1-m2)/(m1+m2))*v0;
+      vf2 = (2*m1/(m1+m2))*v0;    
+  }
+  cout<<"Si la masa 1 esta en reposo"<<"\n";
+  if(v0==0)
+  {
+      vf1 = ((m1-m2)/(m1+m2))*v02;
+      vf2 = (2*m2/(m1+m2))*v02;  
+  }
+  if((v0>0) && (v02>0))
+  {
+      vf1 = ((m1-m2)/(m1+m2))*v0 + (2*m2/(m1+m2))*v02;
+      vf2 = (2*m1/(m1+m2))*v0 - ((m1-m2)/(m1+m2))*v02;
+  }
+  
+  printf("Vf1=%4.4f  Vf2=%4.4f  \n",vf1,vf2);
+}
+
+void rebote(void)
+{
+    float h1 = 0, a=0, h2 = 0;
+    int n = 1, acum = 0;
+    //primer rebote
+    h1=pow(e1,2)*h;
+    while(h1>0.3)
+    {
+    h1=0;
+    h1=pow(e1,(2*n))*h;
+    printf("Hn=%4.4f  R=%i  \n",h1,n);
+    acum=acum+n;
+    n++;
+    }
+
+}
